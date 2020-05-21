@@ -1,59 +1,71 @@
 ﻿using System;
-using System.Globalization;
 
 namespace Desafio05
 {
     class Program
     {
-        private const double Salario = 1045.0;
         private const int QtdPedreiro = 40;
+
         static void Main(string[] args)
         {
+            Console.Write("Informe o valor do salário: ");
+            double salario = double.Parse(Console.ReadLine());
+
             Console.Write("Informe o tamanho do lado: ");
             double lado = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("Custo total: " + GetCusto(lado).ToString("F2", CultureInfo.InvariantCulture));
+            double valorPorMetroQuadrado = salario * 0.1;
+            Console.WriteLine("Valor por metro quadrado: " + valorPorMetroQuadrado);
+
+            double areaDoQuarto = GetAreaDoQuarto(lado);
+            Console.WriteLine("Área de um quarto: {0:F2} m2", areaDoQuarto);
+
+            double areaDoBanheiro = GetAreaDoBanheiro(lado);
+            Console.WriteLine("Área de um banheiro: {0:F2} m2", areaDoBanheiro);
+
+            double areaDoEscritorio = GetAreaDoEscritorio(lado);
+            Console.WriteLine("Área de um escritório: {0:F2} m2", areaDoEscritorio);
+
+            double areaDaSala = GetAreaDaSala(lado);
+            Console.WriteLine("Área da sala: {0:F2} m2", areaDaSala);
+
+            double areaDaCopaECozinha = GetAreaDaCopaECozinha(lado);
+            Console.WriteLine("Área da copa e da cozinha: {0:F2} m2", areaDaCopaECozinha);
+
+            double areaDaCasa = GetAreaDaCasa(areaDoQuarto, areaDoBanheiro,
+                areaDoEscritorio, areaDaSala, areaDaCopaECozinha);
+            Console.WriteLine("Área da casa: {0:F2} m2", areaDaCasa);
+
+            double valorDaMaoDeObraDaCasa = GetValorDaMaoDeObraDaCasa(valorPorMetroQuadrado, areaDaCasa);
+            Console.WriteLine("Valor da mão de obra de uma casa: {0:F2} m2", valorDaMaoDeObraDaCasa);
+
+            Console.WriteLine("Valor da mão de obra do condomínio: {0:F2} m2",
+                GetValorDaMaoDeObraDoCondominio(valorDaMaoDeObraDaCasa));
         }
 
-        static double GetCusto(double lado)
-        {
-            return QtdPedreiro * SalarioDoPedreiro(lado);
-        }
+        static double GetAreaDoQuarto(double lado)
+            => (lado * lado);
 
-        static double SalarioDoPedreiro(double lado)
-        {
-            return GetAreaTotal(lado) * Salario / 10;
-        }
+        static double GetAreaDoBanheiro(double lado)
+            => (Math.PI * lado * lado * 0.25);
 
-        static double GetAreaTotal(double lado)
-        {
-            return AreaDoRetangulo(lado) + AreaDosQuadrados(lado) + AreaDasCircunferencias(lado) +
-                   AreaDoTriangulo(lado) + AreaDoTrapezio(lado);
-        }
+        static double GetAreaDoEscritorio(double lado)
+            => (lado * lado * 0.5);
 
-        static double AreaDoRetangulo(double lado)
-        {
-            return 8 * lado * lado;
-        }
+        static double GetAreaDaSala(double lado)
+            => (8 * lado * lado);
 
-        static double AreaDosQuadrados(double lado)
-        {
-            return 4 * lado * lado;
-        }
+        static double GetAreaDaCopaECozinha(double lado)
+            => (lado * lado * 1.05);
 
-        static double AreaDasCircunferencias(double lado)
-        {
-            return Math.PI * Math.Pow(lado, 2);
-        }
+        static double GetAreaDaCasa(double areaDoQuarto, double areaDoBanheiro,
+                double areaDoEscritorio, double areaDaSala, double areaDaCopaECozinha)
+            => 4 * (areaDoQuarto + areaDoBanheiro) + areaDaSala + areaDaCopaECozinha + areaDoEscritorio;
 
-        static double AreaDoTriangulo(double lado)
-        {
-            return (lado * lado) / 2;
-        }
+        static double GetValorDaMaoDeObraDaCasa(double valorPorMetroQuadrado, double areaDaCasa)
+            => valorPorMetroQuadrado * areaDaCasa;
 
-        static double AreaDoTrapezio(double lado)
-        {
-            return (3 * lado * lado * 0.7) /  2;
-        }
+        static double GetValorDaMaoDeObraDoCondominio(double valorDaMaoDeObraDaCasa)
+            => QtdPedreiro * valorDaMaoDeObraDaCasa;
     }
 }
